@@ -2,49 +2,77 @@ package com.example.androidapp
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.net.URL
+import java.util.Random
+import kotlin.properties.Delegates
 
-class MainActivity2 : AppCompatActivity(), onClickListener {
+
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
+
+class SecondFragment : Fragment(), onClickListener {
+
     private lateinit var recyclerView: RecyclerView
+    private var index: Int = 0
+    private val args : SecondFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setHasOptionsMenu(true)
+    }
 
-        val data = getRandomWords(intent.getIntExtra("position", 0))
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val word = args.value
+        activity?.title = "Words That Start With $word";
+        return inflater.inflate(R.layout.fragment_first, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        index = args.position
+
+        val data = getRandomWords(index)
 
         val itemAdapter= CustomAdapter (data, this)
 
-        recyclerView = findViewById(R.id.recycler_view)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView = view.findViewById(R.id.recyclerview1)
+        recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = itemAdapter
-
-        val word = intent.getStringExtra("value")
-        title = "Words That Start With $word"
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-        return true
+    override fun onItemClick(position: Int, value: String) {
+        val uri = Uri.parse("https://www.google.com/search?q=$value")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        startActivity(intent)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle item selection.
         return when (item.itemId) {
             R.id.menu_button -> {
                 if (!item.isChecked){
-                    recyclerView.layoutManager = GridLayoutManager(this,3)
+                    recyclerView.layoutManager = GridLayoutManager(context,2)
                     item.setIcon(R.drawable.baseline_list_24)
                     item.setChecked(true)
                 }else{
-                    recyclerView.layoutManager = LinearLayoutManager(this)
+                    recyclerView.layoutManager = LinearLayoutManager(context)
                     item.setIcon(R.drawable.baseline_grid_view_24)
                     item.setChecked(false)
                 }
@@ -52,13 +80,6 @@ class MainActivity2 : AppCompatActivity(), onClickListener {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-
-    override fun onItemClick(position: Int, value: String) {
-        val uri = Uri.parse("https://www.google.com/search?q=$value")
-        val intent = Intent(Intent.ACTION_VIEW, uri)
-        startActivity(intent)
     }
 
     private fun getRandomWords(index:Int): List<String>{
