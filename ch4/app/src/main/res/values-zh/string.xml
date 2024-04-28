@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">提示时间</string>
+    <string name="cost_of_service">服务成本</string>
+    <string name="how_was_the_service">服务怎么样?</string>
+    <string name="amazing_service">惊人的 (二十%)</string>
+    <string name="good_service">好的 (十八%)</string>
+    <string name="ok_service">好的 (十五%)</string>
+    <string name="round_up_tip">圆角提示?</string>
+    <string name="calculate">计算</string>
+    <string name="tip_amount">小费金额</string>
+</resources>
