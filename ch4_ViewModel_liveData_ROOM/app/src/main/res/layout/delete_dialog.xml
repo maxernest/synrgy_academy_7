@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
 
     <androidx.cardview.widget.CardView
@@ -25,40 +25,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:maxWidth="230dp"
-                android:text="Judul Catatan"
+                android:text="Are You Sure ?"
                 android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/noteTextView"
+            <Button
+                android:id="@+id/yesButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxWidth="230dp"
-                android:layout_marginTop="10dp"
-                android:text="Ini Adalah Catatan Yang Dibuat"
-                android:textSize="15sp"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="30dp"
+                android:text="Yes"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
             <Button
-                android:id="@+id/editButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginEnd="10dp"
-                android:backgroundTint="@color/yellow"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/deleteButton"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <Button
-                android:id="@+id/deleteButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:backgroundTint="@color/red"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/noButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="50dp"
+                android:text="No"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -7,10 +7,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.androidapp.entity.Note
+import com.example.androidapp.entity.User
+import com.example.androidapp.viewModel.UserViewModel
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class RegisterFragment : Fragment() {
+    private var userViewModel = UserViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +29,11 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view: View =  inflater.inflate(R.layout.fragment_register, container, false)
+        return inflater.inflate(R.layout.fragment_register, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<TextView>(R.id.registerButton).setOnClickListener {
             val userName = view.findViewById<TextInputEditText>(R.id.editTextUsername).text.toString()
@@ -29,9 +42,11 @@ class RegisterFragment : Fragment() {
             val passwordConfirmation = view.findViewById<TextInputEditText>(R.id.editTextPasswordConfirmation).text.toString()
             Log.d("input", "$userName $email $password $passwordConfirmation")
 
+
+            userViewModel.insertUser(User(0,userName, email, password))
+
             val navigate = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
             findNavController().navigate(navigate)
-
 
         }
 
@@ -39,7 +54,5 @@ class RegisterFragment : Fragment() {
             val navigate = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
             findNavController().navigate(navigate)
         }
-
-        return view
     }
 }

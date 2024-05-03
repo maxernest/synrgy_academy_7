@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.androidapp.entity.Note
+import com.example.androidapp.viewModel.NoteViewModel
 
-class NotesAdapter (private val notesViewModel: NotesViewModel) : RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
+class NotesAdapter (private val mNote: List<Note>, private val noteViewModel: NoteViewModel, private val dialogListener: DialogListener) : RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // inflates the card_view_design view
@@ -22,28 +24,26 @@ class NotesAdapter (private val notesViewModel: NotesViewModel) : RecyclerView.A
     // binds the list items to a view
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
-        val itemsViewModel = notesViewModel.readNotes.value?.get(position)
+        val itemsViewModel = mNote[position]
 
-        if (itemsViewModel != null) {
-            holder.title.text = itemsViewModel.title
-        }
-        if (itemsViewModel != null) {
-            holder.note.text = itemsViewModel.note
-        }
+        holder.title.text = itemsViewModel.title
+        holder.note.text = itemsViewModel.note
 
         holder.editButton.setOnClickListener{
-            notesViewModel.addNote("title two", "note two")
+            dialogListener.editDialog(itemsViewModel.uid)
             Log.d("button clicked", "edit button $itemsViewModel.title, $itemsViewModel.note, $position")
         }
         holder.deleteButton.setOnClickListener{
+            noteViewModel.deleteByUid(itemsViewModel.uid)
             Log.d("button clicked", "delete button $itemsViewModel.title, $itemsViewModel.note, $position")
         }
     }
 
     // return the number of the items in the list
     override fun getItemCount(): Int {
-        val totalItems = notesViewModel.readNotes.value?.size
-        return totalItems ?: 0
+        Log.d("size", mNote.toString())
+        Log.d("size", mNote.size.toString())
+        return mNote.size
 
     }
 
