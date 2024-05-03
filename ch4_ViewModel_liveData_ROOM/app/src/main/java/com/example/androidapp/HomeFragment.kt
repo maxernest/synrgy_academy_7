@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.entity.Note
@@ -42,7 +43,6 @@ class HomeFragment : Fragment(), DialogListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val sharedPreference = this.activity?.getSharedPreferences("NOTES_PREFERENCES", Context.MODE_PRIVATE)
         val username = sharedPreference?.getString("username","")
 
@@ -56,6 +56,21 @@ class HomeFragment : Fragment(), DialogListener {
         view.findViewById<ImageButton>(R.id.addButton).setOnClickListener{
             showDialog(username, noteViewModel)
         }
+
+        view.findViewById<TextView>(R.id.welcomeTextView).text = "Welcome, "+username
+
+        view.findViewById<TextView>(R.id.logoutTextView).setOnClickListener {
+            sharedPreference?.edit()?.remove("username")?.commit()
+
+            val navigate = HomeFragmentDirections.actionHomeFragmentToLoginFragment()
+            findNavController().navigate(navigate)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        val sharedPreference = this.activity?.getSharedPreferences("NOTES_PREFERENCES", Context.MODE_PRIVATE)
+        sharedPreference?.edit()?.clear()?.commit()
     }
 
     private fun showDialog(username: String?, noteViewModel: NoteViewModel?) {
@@ -66,8 +81,6 @@ class HomeFragment : Fragment(), DialogListener {
 
         val body = dialog.findViewById(R.id.titleTextView) as TextView
         body.text = "Input Data"
-
-
 
         val yesBtn = dialog.findViewById(R.id.Button) as Button
         yesBtn.text = "Input"
