@@ -1,4 +1,4 @@
-package com.example.background.workers
+package com.example.domain.utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -11,10 +11,7 @@ import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
 import androidx.annotation.WorkerThread
-import androidx.core.app.NotificationCompat
-import com.example.androidapp.R
 import com.example.background.CHANNEL_ID
-import com.example.background.NOTIFICATION_TITLE
 import com.example.background.OUTPUT_PATH
 import com.example.background.VERBOSE_NOTIFICATION_CHANNEL_DESCRIPTION
 import com.example.background.VERBOSE_NOTIFICATION_CHANNEL_NAME
@@ -24,7 +21,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.util.UUID
 
-private const val TAG = "WorkerUtils"
 fun makeStatusNotification(message: String, context: Context) {
 
     // Make a channel if necessary
@@ -43,14 +39,6 @@ fun makeStatusNotification(message: String, context: Context) {
 
         notificationManager?.createNotificationChannel(channel)
     }
-
-    // Create the notification
-    val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle(NOTIFICATION_TITLE)
-            .setContentText(message)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setVibrate(LongArray(0))
 }
 
 /**

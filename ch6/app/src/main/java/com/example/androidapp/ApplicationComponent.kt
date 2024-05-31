@@ -1,6 +1,9 @@
-package com.example.androidapp.di
+package com.example.androidapp
 
 import android.content.Context
+import com.example.androidapp.di.ApiModule
+import com.example.androidapp.di.DataStoreModule
+import com.example.androidapp.di.DatabaseModule
 import com.example.androidapp.presentation.fragment.HomeFragment
 import com.example.androidapp.presentation.fragment.LoginFragment
 import com.example.androidapp.presentation.fragment.MovieDetailFragment

@@ -1,24 +1,21 @@
-package com.example.androidapp.domain
+package com.example.domain
 
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.text.TextUtils
 import android.util.Log
-import androidx.work.Worker
-import androidx.work.WorkerParameters
-import androidx.work.workDataOf
-import com.example.background.KEY_IMAGE_URI
-import com.example.background.workers.blurBitmap
-import com.example.background.workers.writeBitmapToFile
+import com.example.domain.utils.blurBitmap
+import com.example.domain.utils.writeBitmapToFile
 
 private const val TAG = "BlurWorker"
-class BlurWorker(context : Context, params : WorkerParameters): Worker(context,params) {
+
+class BlurWorker(context : Context, params : androidx.work.WorkerParameters): androidx.work.Worker(context,params) {
 
     override fun doWork(): Result {
         val appContext = applicationContext
 
-        val resourceUri = inputData.getString(KEY_IMAGE_URI)
+        val resourceUri = inputData.getString(com.example.background.KEY_IMAGE_URI)
 
         return try {
             if (TextUtils.isEmpty(resourceUri)) {
@@ -37,7 +34,8 @@ class BlurWorker(context : Context, params : WorkerParameters): Worker(context,p
             // Write bitmap to a temp file
             val outputUri = writeBitmapToFile(appContext, output)
 
-            val outputData = workDataOf(KEY_IMAGE_URI to outputUri.toString())
+            val outputData =
+                androidx.work.workDataOf(com.example.background.KEY_IMAGE_URI to outputUri.toString())
 
             Result.success(outputData)
         } catch (throwable: Throwable) {

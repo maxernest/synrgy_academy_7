@@ -7,8 +7,6 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.androidapp.data.local.UserDatabase
 import com.example.androidapp.data.remote.ApiService
-import com.example.androidapp.di.ApplicationComponent
-import com.example.androidapp.di.DaggerApplicationComponent
 
 class MainApplication: Application() {
     val Context.datastore: DataStore<Preferences> by preferencesDataStore(name = "dataStore")
