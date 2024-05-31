@@ -1,4 +1,4 @@
-package com.example.androidapp.component
+package com.example.androidapp.presentation.ui
 
 import android.Manifest
 import android.app.Dialog
@@ -28,23 +28,26 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.bumptech.glide.Glide
+import com.example.androidapp.MainApplication
 import com.example.androidapp.PermissionUtils
 import com.example.androidapp.R
 import com.example.androidapp.dataStore.DataStoreManager
 import com.example.androidapp.viewModel.DataStoreViewModel
 import com.example.androidapp.viewModel.DataStoreViewModelFactory
 import com.example.androidapp.viewModel.UserViewModel
+import com.example.androidapp.viewModel.UserViewModelFactory
 import com.example.androidapp.worker.BlurWorker
 import com.example.background.KEY_IMAGE_URI
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.io.File
+import javax.inject.Inject
 
 class ProfileFragment : Fragment() {
     private lateinit var dataStoreViewModel: DataStoreViewModel
     private lateinit var pref: DataStoreManager
-    private var userViewModel = UserViewModel()
+    private lateinit var userViewModel : UserViewModel
     private lateinit var uri: Uri
     private val cameraResult =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { result ->
@@ -59,6 +62,8 @@ class ProfileFragment : Fragment() {
             }
         }
 
+    @Inject
+    lateinit var userViewModelFactory: UserViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,8 +79,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pref = DataStoreManager(requireContext())
-        dataStoreViewModel = ViewModelProvider(this, DataStoreViewModelFactory(pref))[DataStoreViewModel::class.java]
+        this.initialization()
 
         view.findViewById<ImageView>(R.id.imageView).setOnClickListener {
             val profilePicture = view.findViewById<ImageView>(R.id.imageView)
@@ -99,7 +103,7 @@ class ProfileFragment : Fragment() {
                 task.await()
 
                 val navigate =
-                    ProfileFragmentDirections.actionProfileFragment2ToLoginFragment()
+                    com.example.androidapp.component.ProfileFragmentDirections.actionProfileFragment2ToLoginFragment()
                 findNavController().navigate(navigate)
             }
         }
@@ -242,7 +246,7 @@ class ProfileFragment : Fragment() {
             userViewModel.updateUser(it, username, fullName, birthDate, address)
         }
         val navigate =
-            ProfileFragmentDirections.actionProfileFragment2ToHomeFragment()
+            com.example.androidapp.component.ProfileFragmentDirections.actionProfileFragment2ToHomeFragment()
         findNavController().navigate(navigate)
     }
 
@@ -263,5 +267,14 @@ class ProfileFragment : Fragment() {
         }
 
         dialog.show()
+    }
+
+    private fun initialization(){
+        (getActivity()?.applicationContext as MainApplication).applicationComponent.inject(this)
+        userViewModel = ViewModelProvider(this, userViewModelFactory).get(UserViewModel::class.java)
+
+        pref = DataStoreManager(requireContext())
+        dataStoreViewModel = ViewModelProvider(this, DataStoreViewModelFactory(pref))[DataStoreViewModel::class.java]
+
     }
 }

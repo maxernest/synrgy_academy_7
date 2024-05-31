@@ -1,4 +1,4 @@
-package com.example.androidapp.component
+package com.example.androidapp.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,10 +11,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.androidapp.MainApplication
 import com.example.androidapp.MoviesAdapter
 import com.example.androidapp.R
-import com.example.androidapp.api.ApiRepository
-import com.example.androidapp.api.ApiService
 import com.example.androidapp.dataStore.DataStoreManager
 import com.example.androidapp.onClickListener
 import com.example.androidapp.viewModel.DataStoreViewModel
@@ -22,14 +21,23 @@ import com.example.androidapp.viewModel.DataStoreViewModelFactory
 import com.example.androidapp.viewModel.MovieViewModel
 import com.example.androidapp.viewModel.MovieViewModelFactory
 import com.example.androidapp.viewModel.UserViewModel
+import com.example.androidapp.viewModel.UserViewModelFactory
+import javax.inject.Inject
 
 class HomeFragment : Fragment(), onClickListener{
 
-    private var userViewModel = UserViewModel()
+//    private var userViewModel = UserViewModel()
     private lateinit var viewModel: MovieViewModel
+    private lateinit var userviewModel: UserViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var dataStoreViewModel: DataStoreViewModel
     private lateinit var pref: DataStoreManager
+
+    @Inject
+    lateinit var movieViewModelFactory: MovieViewModelFactory
+
+    @Inject
+    lateinit var userViewModelFactory: UserViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,11 +53,7 @@ class HomeFragment : Fragment(), onClickListener{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val apiService = ApiService.getInstance()
-        val apiRepository = ApiRepository(apiService)
-
-        viewModel = ViewModelProvider(this, MovieViewModelFactory(apiRepository)).get(MovieViewModel::class.java)
-
+        this.initialization()
 
         viewModel.movieList.observe(viewLifecycleOwner) {
             recyclerView = view.findViewById<RecyclerView>(R.id.recyclerviewMovie)
@@ -61,7 +65,7 @@ class HomeFragment : Fragment(), onClickListener{
 
         view.findViewById<ImageView>(R.id.imageView2).setOnClickListener {
             val navigate =
-                HomeFragmentDirections.actionHomeFragmentToProfileFragment2()
+                com.example.androidapp.component.HomeFragmentDirections.actionHomeFragmentToProfileFragment2()
             findNavController().navigate(navigate)
         }
 
@@ -69,7 +73,7 @@ class HomeFragment : Fragment(), onClickListener{
         dataStoreViewModel = ViewModelProvider(this, DataStoreViewModelFactory(pref))[DataStoreViewModel::class.java]
 
         dataStoreViewModel.getDataStore().observe(viewLifecycleOwner) {
-            val user = userViewModel.findUserById(it)
+            val user = userviewModel.findUserById(it)
             val name = user?.fullName ?: "no name"
             view.findViewById<TextView>(R.id.welcomeTextView).text = "Welcome, $name"
         }
@@ -77,7 +81,16 @@ class HomeFragment : Fragment(), onClickListener{
 
     override fun onItemClick(movieId:Int) {
         val navigate =
-            HomeFragmentDirections.actionHomeFragmentToMovieDetailFragment(movieId)
+            com.example.androidapp.component.HomeFragmentDirections.actionHomeFragmentToMovieDetailFragment(
+                movieId
+            )
         findNavController().navigate(navigate)
+    }
+
+    private fun initialization(){
+        (getActivity()?.applicationContext as MainApplication).applicationComponent.inject(this)
+
+        viewModel = ViewModelProvider(this, movieViewModelFactory).get(MovieViewModel::class.java)
+        userviewModel = ViewModelProvider(this, userViewModelFactory).get(UserViewModel::class.java)
     }
 }

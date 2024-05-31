@@ -1,4 +1,4 @@
-package com.example.androidapp.component
+package com.example.androidapp.presentation.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,17 +10,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.androidapp.MainApplication
 import com.example.androidapp.R
-import com.example.androidapp.api.ApiRepository
-import com.example.androidapp.api.ApiService
 import com.example.androidapp.api.response.MovieDetail
 import com.example.androidapp.viewModel.MovieViewModel
 import com.example.androidapp.viewModel.MovieViewModelFactory
+import javax.inject.Inject
 
 class MovieDetailFragment : Fragment() {
 
     private lateinit var viewModel: MovieViewModel
-    private val safeArgs: MovieDetailFragmentArgs by navArgs()
+    private val safeArgs: com.example.androidapp.component.MovieDetailFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var movieViewModelFactory: MovieViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +40,7 @@ class MovieDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val apiService = ApiService.getInstance()
-        val apiRepository = ApiRepository(apiService)
-
-        viewModel = ViewModelProvider(this, MovieViewModelFactory(apiRepository)).get(MovieViewModel::class.java)
-
+        this.initialization()
 
         viewModel.movieDetail.observe(viewLifecycleOwner) {
             insertDataToView(it)
@@ -63,5 +62,10 @@ class MovieDetailFragment : Fragment() {
         view?.findViewById<TextView>(R.id.languangeTextView)?.text = movieDetail.spoken_languages[0].english_name
         view?.findViewById<TextView>(R.id.genreTextView)?.text = movieDetail.genres.joinToString { genre -> genre.name }
         view?.findViewById<TextView>(R.id.descriptionTextView)?.text = movieDetail.overview
+    }
+
+    private fun initialization(){
+        (getActivity()?.applicationContext as MainApplication).applicationComponent.inject(this)
+        viewModel = ViewModelProvider(this, movieViewModelFactory).get(MovieViewModel::class.java)
     }
 }
