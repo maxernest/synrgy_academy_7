@@ -1,4 +1,4 @@
-package com.example.androidapp.data.local.dataStore
+package com.example.androidapp.data.local
 
 import android.content.Context
 import android.util.Log

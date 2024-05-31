@@ -1,10 +1,10 @@
-package com.example.androidapp.viewModel
+package com.example.androidapp.presentation.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
-import com.example.androidapp.dataStore.DataStoreManager
+import com.example.androidapp.data.local.DataStoreManager
 
 class DataStoreViewModel(private val pref: DataStoreManager) : ViewModel() {
 

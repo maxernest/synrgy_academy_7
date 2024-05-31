@@ -1,8 +1,8 @@
-package com.example.androidapp.viewModel
+package com.example.androidapp.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.androidapp.api.ApiRepository
+import com.example.androidapp.data.repository.ApiRepository
 import javax.inject.Inject
 
 class MovieViewModelFactory @Inject constructor(private val repository: ApiRepository): ViewModelProvider.Factory {

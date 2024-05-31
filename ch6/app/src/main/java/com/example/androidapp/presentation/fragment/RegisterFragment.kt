@@ -1,4 +1,4 @@
-package com.example.androidapp.presentation.ui
+package com.example.androidapp.presentation.fragment
 
 import android.os.Bundle
 import android.util.Log
@@ -12,12 +12,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.androidapp.MainApplication
 import com.example.androidapp.R
-import com.example.androidapp.dataStore.DataStoreManager
-import com.example.androidapp.entity.User
-import com.example.androidapp.viewModel.DataStoreViewModel
-import com.example.androidapp.viewModel.DataStoreViewModelFactory
-import com.example.androidapp.viewModel.UserViewModel
-import com.example.androidapp.viewModel.UserViewModelFactory
+import com.example.androidapp.data.local.entity.User
+import com.example.androidapp.presentation.viewModel.DataStoreViewModel
+import com.example.androidapp.presentation.viewModel.DataStoreViewModelFactory
+import com.example.androidapp.presentation.viewModel.UserViewModel
+import com.example.androidapp.presentation.viewModel.UserViewModelFactory
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -27,10 +26,12 @@ class RegisterFragment : Fragment() {
 
     private lateinit var userViewModel : UserViewModel
     private lateinit var dataStoreViewModel: DataStoreViewModel
-    private lateinit var pref: DataStoreManager
 
     @Inject
     lateinit var userViewModelFactory: UserViewModelFactory
+
+    @Inject
+    lateinit var dataStoreViewModelFactory: DataStoreViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,19 +54,19 @@ class RegisterFragment : Fragment() {
             registerHandler(view, dataStoreViewModel)
 
             val navigate =
-                com.example.androidapp.component.RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
+                RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
             findNavController().navigate(navigate)
 
         }
 
         view.findViewById<TextView>(R.id.goToLogin).setOnClickListener {
             val navigate =
-                com.example.androidapp.component.RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
+                RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
             findNavController().navigate(navigate)
         }
     }
 
-    private fun registerHandler(view:View, dataStoreViewModel:DataStoreViewModel){
+    private fun registerHandler(view:View, dataStoreViewModel: DataStoreViewModel){
         val userName = view.findViewById<TextInputEditText>(R.id.editTextUsername).text.toString()
         val email = view.findViewById<TextInputEditText>(R.id.editTextEmail).text.toString()
         val password = view.findViewById<TextInputEditText>(R.id.editTextPassword).text.toString()
@@ -90,8 +91,6 @@ class RegisterFragment : Fragment() {
     private fun initialization(){
         (getActivity()?.applicationContext as MainApplication).applicationComponent.inject(this)
         userViewModel = ViewModelProvider(this, userViewModelFactory).get(UserViewModel::class.java)
-
-        pref = DataStoreManager(requireContext())
-        dataStoreViewModel = ViewModelProvider(this, DataStoreViewModelFactory(pref))[DataStoreViewModel::class.java]
+        dataStoreViewModel = ViewModelProvider(this, dataStoreViewModelFactory).get(dataStoreViewModel::class.java)
     }
 }

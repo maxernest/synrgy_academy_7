@@ -1,4 +1,4 @@
-package com.example.androidapp.presentation.ui
+package com.example.androidapp.presentation.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,15 +12,15 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.androidapp.MainApplication
 import com.example.androidapp.R
-import com.example.androidapp.api.response.MovieDetail
-import com.example.androidapp.viewModel.MovieViewModel
-import com.example.androidapp.viewModel.MovieViewModelFactory
+import com.example.androidapp.data.remote.response.MovieDetail
+import com.example.androidapp.presentation.viewModel.MovieViewModel
+import com.example.androidapp.presentation.viewModel.MovieViewModelFactory
 import javax.inject.Inject
 
 class MovieDetailFragment : Fragment() {
 
     private lateinit var viewModel: MovieViewModel
-    private val safeArgs: com.example.androidapp.component.MovieDetailFragmentArgs by navArgs()
+    private val safeArgs: MovieDetailFragmentArgs by navArgs()
 
     @Inject
     lateinit var movieViewModelFactory: MovieViewModelFactory

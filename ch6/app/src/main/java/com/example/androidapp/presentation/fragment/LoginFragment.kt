@@ -1,4 +1,4 @@
-package com.example.androidapp.presentation.ui
+package com.example.androidapp.presentation.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,11 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.androidapp.MainApplication
 import com.example.androidapp.R
-import com.example.androidapp.dataStore.DataStoreManager
-import com.example.androidapp.viewModel.DataStoreViewModel
-import com.example.androidapp.viewModel.DataStoreViewModelFactory
-import com.example.androidapp.viewModel.UserViewModel
-import com.example.androidapp.viewModel.UserViewModelFactory
+import com.example.androidapp.presentation.viewModel.DataStoreViewModel
+import com.example.androidapp.presentation.viewModel.DataStoreViewModelFactory
+import com.example.androidapp.presentation.viewModel.UserViewModel
+import com.example.androidapp.presentation.viewModel.UserViewModelFactory
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -26,10 +25,11 @@ class LoginFragment : Fragment() {
 
     private lateinit var userViewModel : UserViewModel
     private lateinit var dataStoreViewModel: DataStoreViewModel
-    private lateinit var pref: DataStoreManager
 
     @Inject
     lateinit var userViewModelFactory: UserViewModelFactory
+    @Inject
+    lateinit var dataStoreViewModelFactory: DataStoreViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +51,7 @@ class LoginFragment : Fragment() {
         dataStoreViewModel.getDataStore().observe(viewLifecycleOwner) {
             if (it > -1) {
                 val navigate =
-                    com.example.androidapp.component.LoginFragmentDirections.actionLoginFragmentToHomeFragment()
+                    LoginFragmentDirections.actionLoginFragmentToHomeFragment()
                 findNavController().navigate(navigate)
             }
         }
@@ -65,7 +65,7 @@ class LoginFragment : Fragment() {
 
         view.findViewById<TextView>(R.id.goToRegister).setOnClickListener {
             val navigate =
-                com.example.androidapp.component.LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
+                LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
             findNavController().navigate(navigate)
         }
     }
@@ -81,7 +81,7 @@ class LoginFragment : Fragment() {
             }
 
             val navigate =
-                com.example.androidapp.component.LoginFragmentDirections.actionLoginFragmentToHomeFragment()
+                LoginFragmentDirections.actionLoginFragmentToHomeFragment()
             findNavController().navigate(navigate)
         } else {
             Toast.makeText(context, "no user found", Toast.LENGTH_SHORT).show()
@@ -92,7 +92,5 @@ class LoginFragment : Fragment() {
         (getActivity()?.applicationContext as MainApplication).applicationComponent.inject(this)
         userViewModel = ViewModelProvider(this, userViewModelFactory).get(UserViewModel::class.java)
 
-        pref = DataStoreManager(requireContext())
-        dataStoreViewModel = ViewModelProvider(this, DataStoreViewModelFactory(pref))[DataStoreViewModel::class.java]
-    }
+        dataStoreViewModel = ViewModelProvider(this, dataStoreViewModelFactory).get(DataStoreViewModel::class.java)    }
 }

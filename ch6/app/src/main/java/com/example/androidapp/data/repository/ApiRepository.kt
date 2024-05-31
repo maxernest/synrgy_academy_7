@@ -1,6 +1,6 @@
-package com.example.androidapp.data
+package com.example.androidapp.data.repository
 
-import com.example.androidapp.api.ApiService
+import com.example.androidapp.data.remote.ApiService
 import javax.inject.Inject
 
 class ApiRepository @Inject constructor(private val apiService: ApiService) {

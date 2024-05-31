@@ -1,4 +1,4 @@
-package com.example.androidapp.presentation.ui
+package com.example.androidapp.presentation.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,32 +12,30 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.androidapp.MainApplication
-import com.example.androidapp.MoviesAdapter
 import com.example.androidapp.R
-import com.example.androidapp.dataStore.DataStoreManager
-import com.example.androidapp.onClickListener
-import com.example.androidapp.viewModel.DataStoreViewModel
-import com.example.androidapp.viewModel.DataStoreViewModelFactory
-import com.example.androidapp.viewModel.MovieViewModel
-import com.example.androidapp.viewModel.MovieViewModelFactory
-import com.example.androidapp.viewModel.UserViewModel
-import com.example.androidapp.viewModel.UserViewModelFactory
+import com.example.androidapp.presentation.listener.onClickListener
+import com.example.androidapp.presentation.ui.adapter.MoviesAdapter
+import com.example.androidapp.presentation.viewModel.DataStoreViewModel
+import com.example.androidapp.presentation.viewModel.DataStoreViewModelFactory
+import com.example.androidapp.presentation.viewModel.MovieViewModel
+import com.example.androidapp.presentation.viewModel.MovieViewModelFactory
+import com.example.androidapp.presentation.viewModel.UserViewModel
+import com.example.androidapp.presentation.viewModel.UserViewModelFactory
 import javax.inject.Inject
 
-class HomeFragment : Fragment(), onClickListener{
+class HomeFragment : Fragment(), onClickListener {
 
-//    private var userViewModel = UserViewModel()
     private lateinit var viewModel: MovieViewModel
-    private lateinit var userviewModel: UserViewModel
+    private lateinit var userViewModel: UserViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var dataStoreViewModel: DataStoreViewModel
-    private lateinit var pref: DataStoreManager
 
     @Inject
     lateinit var movieViewModelFactory: MovieViewModelFactory
-
     @Inject
     lateinit var userViewModelFactory: UserViewModelFactory
+    @Inject
+    lateinit var dataStoreViewModelFactory: DataStoreViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,15 +63,12 @@ class HomeFragment : Fragment(), onClickListener{
 
         view.findViewById<ImageView>(R.id.imageView2).setOnClickListener {
             val navigate =
-                com.example.androidapp.component.HomeFragmentDirections.actionHomeFragmentToProfileFragment2()
+                HomeFragmentDirections.actionHomeFragmentToProfileFragment2()
             findNavController().navigate(navigate)
         }
 
-        pref = DataStoreManager(requireContext())
-        dataStoreViewModel = ViewModelProvider(this, DataStoreViewModelFactory(pref))[DataStoreViewModel::class.java]
-
         dataStoreViewModel.getDataStore().observe(viewLifecycleOwner) {
-            val user = userviewModel.findUserById(it)
+            val user = userViewModel.findUserById(it)
             val name = user?.fullName ?: "no name"
             view.findViewById<TextView>(R.id.welcomeTextView).text = "Welcome, $name"
         }
@@ -81,7 +76,7 @@ class HomeFragment : Fragment(), onClickListener{
 
     override fun onItemClick(movieId:Int) {
         val navigate =
-            com.example.androidapp.component.HomeFragmentDirections.actionHomeFragmentToMovieDetailFragment(
+            HomeFragmentDirections.actionHomeFragmentToMovieDetailFragment(
                 movieId
             )
         findNavController().navigate(navigate)
@@ -91,6 +86,7 @@ class HomeFragment : Fragment(), onClickListener{
         (getActivity()?.applicationContext as MainApplication).applicationComponent.inject(this)
 
         viewModel = ViewModelProvider(this, movieViewModelFactory).get(MovieViewModel::class.java)
-        userviewModel = ViewModelProvider(this, userViewModelFactory).get(UserViewModel::class.java)
+        userViewModel = ViewModelProvider(this, userViewModelFactory).get(UserViewModel::class.java)
+        dataStoreViewModel = ViewModelProvider(this, dataStoreViewModelFactory).get(DataStoreViewModel::class.java)
     }
 }

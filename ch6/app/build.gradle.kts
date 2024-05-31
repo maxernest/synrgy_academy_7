@@ -49,6 +49,8 @@ android {
 }
 
 dependencies {
+    implementation("com.google.dagger:dagger:2.46.1")
+    kapt("com.google.dagger:dagger-compiler:2.46.1")
     implementation ("androidx.work:work-runtime-ktx:2.8.1")
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")

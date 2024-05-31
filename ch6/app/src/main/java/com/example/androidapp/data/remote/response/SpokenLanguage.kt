@@ -1,4 +1,4 @@
-package com.example.androidapp.api.response
+package com.example.androidapp.data.remote.response
 
 data class SpokenLanguage(
     val english_name: String,

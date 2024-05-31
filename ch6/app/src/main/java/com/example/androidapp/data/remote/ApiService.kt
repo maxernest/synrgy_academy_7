@@ -1,7 +1,7 @@
-package com.example.androidapp.api
+package com.example.androidapp.data.remote
 
-import com.example.androidapp.api.response.MovieDetail
-import com.example.androidapp.api.response.NowPlayingMovie
+import com.example.androidapp.data.remote.response.MovieDetail
+import com.example.androidapp.data.remote.response.NowPlayingMovie
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

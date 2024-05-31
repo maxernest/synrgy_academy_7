@@ -1,10 +1,10 @@
-package com.example.androidapp.viewModel
+package com.example.androidapp.presentation.viewModel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.androidapp.api.ApiRepository
-import com.example.androidapp.api.response.MovieDetail
-import com.example.androidapp.api.response.Result
+import com.example.androidapp.data.remote.response.MovieDetail
+import com.example.androidapp.data.remote.response.Result
+import com.example.androidapp.data.repository.ApiRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
