@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.androidapp.data.remote.response.MovieDetail
 import com.example.androidapp.data.remote.response.Result
 import com.example.androidapp.data.repository.ApiRepository
+import com.example.data.remote.request.FavoriteMovie
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +46,17 @@ class MovieViewModel constructor(private val apiRepository: ApiRepository) : Vie
                     movieDetail.postValue(response.body())
                     loading.value = false
                 } else {
+                    onError("Error : ${response.message()} ")
+                }
+            }
+        }
+    }
+
+    fun addFavoriteMovie(accountId:String, favoriteMovie: FavoriteMovie) {
+        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
+            val response = apiRepository.addFavoriteMovie(accountId, favoriteMovie)
+            withContext(Dispatchers.Main) {
+                if (!response.isSuccessful) {
                     onError("Error : ${response.message()} ")
                 }
             }

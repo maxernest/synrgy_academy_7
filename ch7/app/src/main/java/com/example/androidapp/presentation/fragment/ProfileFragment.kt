@@ -99,7 +99,7 @@ class ProfileFragment : Fragment() {
 
         view.findViewById<Button>(R.id.logoutButton).setOnClickListener {
             lifecycleScope.launch {
-                val task = async { dataStoreViewModel.saveDataStore(-1) }
+                val task = async { dataStoreViewModel.saveDataStore(-1, -1) }
                 task.await()
 
                 val navigate =
@@ -242,7 +242,7 @@ class ProfileFragment : Fragment() {
         val birthDate = view.findViewById<TextInputEditText>(R.id.editTextBirthDate).text.toString()
         val address = view.findViewById<TextInputEditText>(R.id.editTextAddress).text.toString()
 
-        dataStoreViewModel.getDataStore().observe(viewLifecycleOwner) {
+        dataStoreViewModel.getUser().observe(viewLifecycleOwner) {
             userViewModel.updateUser(it, username, fullName, birthDate, address)
         }
         val navigate =

@@ -17,9 +17,22 @@ class DataStoreManager(private val context: Context) {
         }
     }
 
+    suspend fun setAcount(accountId: Int) {
+        context.counterDataStore.edit { preferences ->
+            preferences[ACCOUNT_KEY] = accountId
+            Log.d("dataStore", accountId.toString())
+        }
+    }
+
     fun getUser(): Flow<Int> {
         return context.counterDataStore.data.map { preferences ->
             preferences[USER_KEY] ?: -1
+        }
+    }
+
+    fun getAccount(): Flow<Int> {
+        return context.counterDataStore.data.map { preferences ->
+            preferences[ACCOUNT_KEY] ?: -1
         }
     }
 
@@ -27,6 +40,7 @@ class DataStoreManager(private val context: Context) {
         private const val DATASTORE_NAME = "data_store"
 
         private val USER_KEY = intPreferencesKey("user")
+        private val ACCOUNT_KEY = intPreferencesKey("account")
 
         private val Context.counterDataStore by preferencesDataStore(
             name = DATASTORE_NAME

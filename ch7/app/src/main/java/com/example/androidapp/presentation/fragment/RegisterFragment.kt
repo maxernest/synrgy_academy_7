@@ -81,7 +81,7 @@ class RegisterFragment : Fragment() {
 
         if (newUser != null) {
             lifecycleScope.launch {
-                val task = async { dataStoreViewModel.saveDataStore(newUser.uid) }
+                val task = async { dataStoreViewModel.saveDataStore(newUser.uid, newUser.accountId) }
                 task.await()
             }
 
@@ -91,6 +91,6 @@ class RegisterFragment : Fragment() {
     private fun initialization(){
         (getActivity()?.applicationContext as MainApplication).applicationComponent.inject(this)
         userViewModel = ViewModelProvider(this, userViewModelFactory).get(UserViewModel::class.java)
-        dataStoreViewModel = ViewModelProvider(this, dataStoreViewModelFactory).get(dataStoreViewModel::class.java)
+        dataStoreViewModel = ViewModelProvider(this, dataStoreViewModelFactory).get(DataStoreViewModel::class.java)
     }
 }

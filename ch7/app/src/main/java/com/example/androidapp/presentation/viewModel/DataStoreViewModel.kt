@@ -10,11 +10,16 @@ class DataStoreViewModel(private val pref: DataStoreManager) : ViewModel() {
 
     val vUserId: MutableLiveData<Int> = MutableLiveData(0)
 
-    suspend fun saveDataStore(value: Int) {
-            pref.setUser(value)
+    suspend fun saveDataStore(userId: Int, accountId:Int) {
+            pref.setUser(userId)
+            pref.setAcount(accountId)
     }
 
-    fun getDataStore(): LiveData<Int> {
+    fun getUser(): LiveData<Int> {
         return pref.getUser().asLiveData()
+    }
+
+    fun getAccount(): LiveData<Int> {
+        return pref.getAccount().asLiveData()
     }
 }

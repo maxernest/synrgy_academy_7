@@ -13,4 +13,5 @@ data class User(
     @ColumnInfo(name = "fullName") val fullName: String? = null,
     @ColumnInfo(name = "birthDate") val birthDate: String? = null,
     @ColumnInfo(name = "address") val address: String? = null,
+    @ColumnInfo(name = "accountId") val accountId: Int = 21030803,
 )

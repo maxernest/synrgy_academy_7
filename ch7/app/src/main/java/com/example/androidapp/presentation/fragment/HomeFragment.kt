@@ -67,7 +67,7 @@ class HomeFragment : Fragment(), onClickListener {
             findNavController().navigate(navigate)
         }
 
-        dataStoreViewModel.getDataStore().observe(viewLifecycleOwner) {
+        dataStoreViewModel.getUser().observe(viewLifecycleOwner) {
             val user = userViewModel.findUserById(it)
             val name = user?.fullName ?: "no name"
             view.findViewById<TextView>(R.id.welcomeTextView).text = "Welcome, $name"

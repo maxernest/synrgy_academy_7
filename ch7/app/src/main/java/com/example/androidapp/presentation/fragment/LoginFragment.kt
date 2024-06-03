@@ -48,7 +48,7 @@ class LoginFragment : Fragment() {
 
         this.initialization()
 
-        dataStoreViewModel.getDataStore().observe(viewLifecycleOwner) {
+        dataStoreViewModel.getUser().observe(viewLifecycleOwner) {
             if (it > -1) {
                 val navigate =
                     LoginFragmentDirections.actionLoginFragmentToHomeFragment()
@@ -76,7 +76,7 @@ class LoginFragment : Fragment() {
 
         if (isUserExistPromise !== null) {
             lifecycleScope.launch {
-                val task = async { dataStoreViewModel.saveDataStore(isUserExistPromise.uid) }
+                val task = async { dataStoreViewModel.saveDataStore(isUserExistPromise.uid,isUserExistPromise.accountId) }
                 task.await()
             }
 
@@ -91,6 +91,6 @@ class LoginFragment : Fragment() {
     private fun initialization(){
         (getActivity()?.applicationContext as MainApplication).applicationComponent.inject(this)
         userViewModel = ViewModelProvider(this, userViewModelFactory).get(UserViewModel::class.java)
-
-        dataStoreViewModel = ViewModelProvider(this, dataStoreViewModelFactory).get(DataStoreViewModel::class.java)    }
+        dataStoreViewModel = ViewModelProvider(this, dataStoreViewModelFactory).get(DataStoreViewModel::class.java)
+    }
 }
