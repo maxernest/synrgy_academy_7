@@ -2,13 +2,11 @@ package com.example.androidapp.presentation.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.androidapp.data.remote.UserDao
 import com.example.androidapp.data.local.entity.User
+import com.example.androidapp.data.remote.UserDao
 import kotlinx.coroutines.launch
 
 class UserViewModel (val userDao: UserDao) : ViewModel() {
-
-//    private val userDao = userDatabase.userDao()
 
     fun insertUser(user: User){
         viewModelScope.launch { userDao.insertAll(user) }

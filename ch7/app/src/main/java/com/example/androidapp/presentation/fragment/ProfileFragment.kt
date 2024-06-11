@@ -88,7 +88,7 @@ class ProfileFragment : Fragment() {
                 this.showDialog()
             }else{
                 Log.e("drawable",drawable.toString())
-                Toast.makeText(context, "already have a profile picture", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "blurring profile picture", Toast.LENGTH_SHORT).show()
                 this.runWorker()
             }
         }

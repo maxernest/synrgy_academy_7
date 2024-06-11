@@ -83,4 +83,7 @@ dependencies {
     implementation(project(":domain"))
     implementation (project(":common"))
     implementation (project(":data"))
+    testImplementation ("io.mockk:mockk-android:1.13.4")
+    testImplementation ("io.mockk:mockk-agent:1.13.4")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.9")
 }

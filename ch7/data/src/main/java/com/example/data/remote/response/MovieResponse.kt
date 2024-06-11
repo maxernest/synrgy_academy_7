@@ -1,6 +1,6 @@
 package com.example.androidapp.data.remote.response
 
-data class NowPlayingMovie(
+data class MovieResponse(
     val page: Int,
     val results: List<Result>,
     val total_pages: Int,

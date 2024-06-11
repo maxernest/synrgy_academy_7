@@ -23,6 +23,6 @@ class MainApplication: Application() {
 
         applicationComponent = DaggerApplicationComponent.factory().create(this)
         userDatabase = UserDatabase.getDatabase(applicationContext)
-        apiService = ApiService.getInstance()
+        apiService = ApiService.getInstance(applicationContext)
     }
 }

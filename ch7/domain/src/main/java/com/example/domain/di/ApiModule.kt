@@ -1,5 +1,6 @@
 package com.example.androidapp.di
 
+import android.content.Context
 import com.example.androidapp.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
@@ -10,7 +11,7 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun provideMovieAPI(): ApiService {
-        return ApiService.getInstance()
+    fun provideMovieAPI(context: Context): ApiService {
+        return ApiService.getInstance(context)
     }
 }

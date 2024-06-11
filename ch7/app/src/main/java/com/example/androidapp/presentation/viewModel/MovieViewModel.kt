@@ -1,5 +1,7 @@
 package com.example.androidapp.presentation.viewModel
 
+import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.androidapp.data.remote.response.MovieDetail
@@ -13,7 +15,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MovieViewModel constructor(private val apiRepository: ApiRepository) : ViewModel() {
+class MovieViewModel (private val apiRepository: ApiRepository) : ViewModel() {
 
     val errorMessage = MutableLiveData<String>()
     val movieList = MutableLiveData<List<Result>>()
@@ -52,12 +54,29 @@ class MovieViewModel constructor(private val apiRepository: ApiRepository) : Vie
         }
     }
 
-    fun addFavoriteMovie(accountId:String, favoriteMovie: FavoriteMovie) {
+    fun getFavoriteMovies(accountId:Int) {
+        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
+            val response = apiRepository.getFavoriteMovies(accountId)
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
+                    movieList.postValue(response.body()?.results)
+                    loading.value = false
+                } else {
+                    onError("Error : ${response.message()} ")
+                }
+            }
+        }
+    }
+
+    fun addFavoriteMovie(accountId:Int, favoriteMovie: FavoriteMovie, context: Context) {
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = apiRepository.addFavoriteMovie(accountId, favoriteMovie)
             withContext(Dispatchers.Main) {
-                if (!response.isSuccessful) {
+                if (response.isSuccessful) {
+                    Toast.makeText(context, "successfully added new favorite movie", Toast.LENGTH_SHORT).show()
+                } else {
                     onError("Error : ${response.message()} ")
+                    Toast.makeText(context, "failed adding new favorite movie", Toast.LENGTH_SHORT).show()
                 }
             }
         }

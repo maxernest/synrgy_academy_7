@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_homeFragment_to_movieDetailFragment"
             app:destination="@id/movieDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_favoriteMovieFragment2"
+            app:destination="@id/favoriteMovieFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment2"
@@ -59,4 +62,8 @@
             android:name="movieId"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/favoriteMovieFragment"
+        android:name="com.example.androidapp.presentation.fragment.FavoriteMovieFragment"
+        android:label="FavoriteMovieFragment" />
 </navigation>

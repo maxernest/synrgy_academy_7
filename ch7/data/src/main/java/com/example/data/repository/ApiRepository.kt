@@ -10,5 +10,7 @@ class ApiRepository @Inject constructor(private val apiService: ApiService) {
 
     suspend fun getMovieDetails(movieId:Int) = apiService.getMovieDetails(movieId)
 
-    suspend fun addFavoriteMovie(accountId:String, favoriteMovie:FavoriteMovie) = apiService.addFavoriteMovie(accountId, favoriteMovie)
+    suspend fun getFavoriteMovies(accountId:Int) = apiService.getFavoriteMovies(accountId)
+
+    suspend fun addFavoriteMovie(accountId:Int, favoriteMovie:FavoriteMovie) = apiService.addFavoriteMovie(accountId, favoriteMovie)
 }

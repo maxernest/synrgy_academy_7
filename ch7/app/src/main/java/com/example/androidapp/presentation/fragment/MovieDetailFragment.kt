@@ -13,17 +13,23 @@ import com.bumptech.glide.Glide
 import com.example.androidapp.MainApplication
 import com.example.androidapp.R
 import com.example.androidapp.data.remote.response.MovieDetail
+import com.example.androidapp.presentation.viewModel.DataStoreViewModel
+import com.example.androidapp.presentation.viewModel.DataStoreViewModelFactory
 import com.example.androidapp.presentation.viewModel.MovieViewModel
 import com.example.androidapp.presentation.viewModel.MovieViewModelFactory
+import com.example.data.remote.request.FavoriteMovie
 import javax.inject.Inject
 
 class MovieDetailFragment : Fragment() {
 
     private lateinit var viewModel: MovieViewModel
+    private lateinit var dataStoreViewModel: DataStoreViewModel
     private val safeArgs: MovieDetailFragmentArgs by navArgs()
 
     @Inject
     lateinit var movieViewModelFactory: MovieViewModelFactory
+    @Inject
+    lateinit var dataStoreViewModelFactory: DataStoreViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +48,11 @@ class MovieDetailFragment : Fragment() {
 
         this.initialization()
 
-        viewModel.movieDetail.observe(viewLifecycleOwner) {
-            insertDataToView(it)
+        viewModel.movieDetail.observe(viewLifecycleOwner) {movieDetail ->
+            insertDataToView(movieDetail)
+            view.findViewById<ImageView>(R.id.favoriteImageView).setOnClickListener {
+                this.addFavoriteMovie(movieDetail)
+            }
         }
 
         viewModel.getMovieDetails(safeArgs.movieId)
@@ -65,7 +74,15 @@ class MovieDetailFragment : Fragment() {
     }
 
     private fun initialization(){
-        (getActivity()?.applicationContext as MainApplication).applicationComponent.inject(this)
+        (activity?.applicationContext as MainApplication).applicationComponent.inject(this)
         viewModel = ViewModelProvider(this, movieViewModelFactory).get(MovieViewModel::class.java)
+        dataStoreViewModel = ViewModelProvider(this, dataStoreViewModelFactory).get(DataStoreViewModel::class.java)
+    }
+
+    private fun addFavoriteMovie(movieDetail: MovieDetail){
+        dataStoreViewModel.getAccount().observe(viewLifecycleOwner) {
+            viewModel.addFavoriteMovie(it, FavoriteMovie(movieDetail.id), requireContext())
+        }
+
     }
 }

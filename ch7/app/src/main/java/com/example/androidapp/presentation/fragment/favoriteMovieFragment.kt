@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -19,21 +17,16 @@ import com.example.androidapp.presentation.viewModel.DataStoreViewModel
 import com.example.androidapp.presentation.viewModel.DataStoreViewModelFactory
 import com.example.androidapp.presentation.viewModel.MovieViewModel
 import com.example.androidapp.presentation.viewModel.MovieViewModelFactory
-import com.example.androidapp.presentation.viewModel.UserViewModel
-import com.example.androidapp.presentation.viewModel.UserViewModelFactory
 import javax.inject.Inject
 
-class HomeFragment : Fragment(), onClickListener {
+class FavoriteMovieFragment : Fragment(), onClickListener {
 
     private lateinit var viewModel: MovieViewModel
-    private lateinit var userViewModel: UserViewModel
     private lateinit var recyclerView: RecyclerView
     private lateinit var dataStoreViewModel: DataStoreViewModel
 
     @Inject
     lateinit var movieViewModelFactory: MovieViewModelFactory
-    @Inject
-    lateinit var userViewModelFactory: UserViewModelFactory
     @Inject
     lateinit var dataStoreViewModelFactory: DataStoreViewModelFactory
 
@@ -45,7 +38,7 @@ class HomeFragment : Fragment(), onClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_favorite_movie, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,27 +49,11 @@ class HomeFragment : Fragment(), onClickListener {
         viewModel.movieList.observe(viewLifecycleOwner) {
             recyclerView = view.findViewById<RecyclerView>(R.id.recyclerviewMovie)
             recyclerView.layoutManager = LinearLayoutManager(context)
-            recyclerView.adapter = MoviesAdapter(it, this@HomeFragment)
+            recyclerView.adapter = MoviesAdapter(it, this@FavoriteMovieFragment)
         }
 
-        viewModel.getNowPlayingMovies()
-
-        view.findViewById<ImageView>(R.id.avatarImageView).setOnClickListener {
-            val navigate =
-                HomeFragmentDirections.actionHomeFragmentToProfileFragment2()
-            findNavController().navigate(navigate)
-        }
-
-        view.findViewById<ImageView>(R.id.favoriteImageView).setOnClickListener {
-            val navigate =
-                HomeFragmentDirections.actionHomeFragmentToFavoriteMovieFragment2()
-            findNavController().navigate(navigate)
-        }
-
-        dataStoreViewModel.getUser().observe(viewLifecycleOwner) {
-            val user = userViewModel.findUserById(it)
-            val name = user?.fullName ?: "no name"
-            view.findViewById<TextView>(R.id.welcomeTextView).text = "Welcome, $name"
+        dataStoreViewModel.getAccount().observe(viewLifecycleOwner) {
+            viewModel.getFavoriteMovies(it)
         }
     }
 
@@ -92,7 +69,6 @@ class HomeFragment : Fragment(), onClickListener {
         (getActivity()?.applicationContext as MainApplication).applicationComponent.inject(this)
 
         viewModel = ViewModelProvider(this, movieViewModelFactory).get(MovieViewModel::class.java)
-        userViewModel = ViewModelProvider(this, userViewModelFactory).get(UserViewModel::class.java)
         dataStoreViewModel = ViewModelProvider(this, dataStoreViewModelFactory).get(DataStoreViewModel::class.java)
     }
 }
