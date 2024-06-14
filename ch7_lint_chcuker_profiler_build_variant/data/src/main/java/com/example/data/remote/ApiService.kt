@@ -19,25 +19,25 @@ interface ApiService {
     @GET("movie/{movie_id}")
     suspend fun getMovieDetails(
         @Path("movie_id") movieId: Int,
-        @Header("Authorization") token: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMjU0NzU3YmQzZTIwZTExNjVmMGRhM2QyOWJhYjE3ZiIsInN1YiI6IjY1ZGI1NzZhODI2MWVlMDE2MmMyNWQxZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kBYBuHgZxra7yXsPYYiEUau0NfxcpWy92yjQZ_Ab6ww")
+        @Header("Authorization") token: String = "Bearer your_api_token")
     : Response<MovieDetail>
 
     @GET("movie/now_playing")
     suspend fun getNowPlayingMovies(
-        @Header("Authorization") token: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMjU0NzU3YmQzZTIwZTExNjVmMGRhM2QyOWJhYjE3ZiIsInN1YiI6IjY1ZGI1NzZhODI2MWVlMDE2MmMyNWQxZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kBYBuHgZxra7yXsPYYiEUau0NfxcpWy92yjQZ_Ab6ww")
+        @Header("Authorization") token: String = "Bearer your_api_token")
     : Response<MovieResponse>
 
     @GET("account/{account_id}/favorite/movies")
     suspend fun getFavoriteMovies(
         @Path("account_id") accountId: Int,
-        @Header("Authorization") token: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMjU0NzU3YmQzZTIwZTExNjVmMGRhM2QyOWJhYjE3ZiIsInN1YiI6IjY1ZGI1NzZhODI2MWVlMDE2MmMyNWQxZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kBYBuHgZxra7yXsPYYiEUau0NfxcpWy92yjQZ_Ab6ww")
+        @Header("Authorization") token: String = "Bearer your_api_token")
             : Response<MovieResponse>
 
     @POST("account/{account_id}/favorite")
     suspend fun addFavoriteMovie(
         @Path("account_id") accountId: Int,
         @Body favoriteMovie: FavoriteMovie,
-        @Header("Authorization") token: String = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMjU0NzU3YmQzZTIwZTExNjVmMGRhM2QyOWJhYjE3ZiIsInN1YiI6IjY1ZGI1NzZhODI2MWVlMDE2MmMyNWQxZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kBYBuHgZxra7yXsPYYiEUau0NfxcpWy92yjQZ_Ab6ww")
+        @Header("Authorization") token: String = "Bearer your_api_token")
             : Response<MovieResponse>
 
 

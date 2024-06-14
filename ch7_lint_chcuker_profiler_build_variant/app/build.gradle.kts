@@ -6,6 +6,23 @@ plugins {
 }
 
 android {
+    flavorDimensions += "package"
+
+    productFlavors {
+        create("free") {
+            dimension = "package"
+            applicationIdSuffix = ".free"
+            versionNameSuffix = "-free"
+            manifestPlaceholders["appIcon"] = "@drawable/heart"
+        }
+        create("paid") {
+            dimension = "package"
+            applicationIdSuffix = ".paid"
+            versionNameSuffix = "-paid"
+            manifestPlaceholders["appIcon"] = "@drawable/money"
+        }
+    }
+
     namespace = "com.example.androidapp"
     compileSdk = 34
 
